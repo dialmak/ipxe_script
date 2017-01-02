@@ -1,0 +1,82 @@
+#!ipxe
+# by dialmak
+
+:start_menu
+menu Select OS
+  item ifl           Image for Linux GUI (3.04)
+  item hdtools       HDTOOLS
+  item tbwinre       TBWinRE 7x64  (3.04)
+  item pe7x86mini    WinPE7  x86 mini
+  item pe8x86mini    WinPE8  x86 mini
+  item pe8x64mini    WinPE8  x64 mini
+  item pe10x86mini   WinPE10 x86 mini
+  choose --default ifl target && goto ${target}
+goto start_menu
+
+:ifl
+initrd ${cdn}/img/IFL-GUI.iso || goto failed
+chain ${cdn}/memdisk iso raw || goto failed
+goto start_menu
+
+:hdtools
+initrd ${cdn}/img/HDTOOLS.BIN || goto failed
+chain ${cdn}/memdisk raw || goto failed
+goto start_menu
+
+
+:tbwinre
+kernel ${cdn}/wimboot || goto failed
+initrd ${cdn}/bootmgr bootmgr || goto failed
+initrd ${cdn}/bcd bcd || goto failed
+initrd ${cdn}/boot.sdi boot.sdi || goto failed
+initrd ${cdn}/img/TBWinRE7x64.wim boot.wim || goto failed
+boot || goto failed
+goto start_menu
+
+
+:pe7x86mini 
+kernel ${cdn}/wimboot || goto failed
+initrd ${cdn}/bootmgr bootmgr || goto failed
+initrd ${cdn}/bcd bcd || goto failed
+initrd ${cdn}/boot.sdi boot.sdi || goto failed
+initrd ${cdn}/img/PE7x86mini.wim boot.wim || goto failed
+boot || goto failed
+goto start_menu
+
+:pe8x86mini 
+kernel ${cdn}/wimboot || goto failed
+initrd ${cdn}/bootmgr bootmgr || goto failed
+initrd ${cdn}/bcd bcd || goto failed
+initrd ${cdn}/boot.sdi boot.sdi || goto failed
+initrd ${cdn}/img/PE8x86mini.wim boot.wim || goto failed
+boot || goto failed
+goto start_menu
+
+:pe8x64mini 
+kernel ${cdn}/wimboot || goto failed
+initrd ${cdn}/bootmgr bootmgr || goto failed
+initrd ${cdn}/bcd bcd || goto failed
+initrd ${cdn}/boot.sdi boot.sdi || goto failed
+initrd ${cdn}/img/PE8x64mini.wim boot.wim || goto failed
+boot || goto failed
+goto start_menu
+
+:pe10x86mini 
+kernel ${cdn}/wimboot || goto failed
+initrd ${cdn}/bootmgr bootmgr || goto failed
+initrd ${cdn}/bcd bcd || goto failed
+initrd ${cdn}/boot.sdi boot.sdi || goto failed
+initrd ${cdn}/img/PE10x86mini.wim boot.wim || goto failed
+boot || goto failed
+goto start_menu
+
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:shell
+echo Type "exit" to get the back to the menu
+echo
+shell
+goto start_menu
